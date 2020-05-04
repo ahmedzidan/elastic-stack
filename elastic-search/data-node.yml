@@ -1,0 +1,32 @@
+version: '2.2'
+services:
+  es-data-node:
+    container_name: es-data-node-01
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
+    environment:
+      - node.name=es-data-node-01
+      - node.master=false
+      - node.voting_only=false
+      - node.data=true
+      - node.ingest=false
+      - node.ml=false
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=es-master-node-01,es-data-node-01
+      - cluster.initial_master_nodes=es-master-node-01
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data:/usr/share/elasticsearch/data
+    networks:
+      - elastic
+
+volumes:
+  data:
+    driver: local
+
+networks:
+  elastic:
