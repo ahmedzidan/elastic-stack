@@ -11,8 +11,7 @@ services:
       - node.ingest=false
       - node.ml=false
       - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=es-master-node-01,es-data-node-01
-      - cluster.initial_master_nodes=es-master-node-01
+      - discovery.seed_hosts=es-master-node-01
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
