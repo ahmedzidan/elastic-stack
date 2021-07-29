@@ -1,2 +1,4 @@
 .idea
 elastic-stack.iml
+elastic-search/certs
+elastic-search/.env

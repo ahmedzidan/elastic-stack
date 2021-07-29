@@ -1,0 +1,25 @@
+version: '2.2'
+
+services:
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.13.4
+    environment:
+      SERVER_NAME: kibana
+      ELASTICSEARCH_URL: https://es01:9200
+      ELASTICSEARCH_HOSTS: https://es01:9200
+      ELASTICSEARCH_USERNAME: "elastic"
+      ELASTICSEARCH_PASSWORD: "test"
+      XPACK_SECURITY_ENABLED: "true"
+      ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES: $CERTS_DIR/ca/ca.crt
+      ELASTICSEARCH_SSL_VERIFICATIONMODE: "none"
+    ports:
+      - 5601:5601
+    networks:
+      - elastic-search_elastic
+    volumes:
+      - ./certs:$CERTS_DIR
+
+networks:
+  elastic-search_elastic:
+    external: true

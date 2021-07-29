@@ -3,7 +3,7 @@ version: '2.2'
 services:
   es-master-node:
     container_name: es-master-node-${NODE_NUMBER}
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.0
     environment:
       - node.name=es-master-node-${NODE_NUMBER}
       - node.master=true
@@ -27,3 +27,4 @@ services:
 networks:
   elastic:
     driver: bridge
+    name: elastic-stack
