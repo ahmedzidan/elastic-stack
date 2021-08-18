@@ -25,6 +25,28 @@ curl -u elastic --cacert ./certs/ca/ca.crt https://localhost:9200/_cat/nodes/?v
       - "ELASTICSEARCH_SSL_VERIFICATIONMODE=none"
       - XPACK_SECURITY_ENCRYPTIONKEY="12345678901234567890123456789012"
 
-
+## How to run it
+1- Increate memory limit using this command
+```
+sysctl -w vm.max_map_count=262144
+```
+Read it from here. https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html
+1- Create a certificate by running the following command
+```shell
 docker-compose -f create-certs.yml run --rm create_certs
+```
+
+2- Copy .env.example to .env file
+```
+cp .env.example .env
+```
+
+3- Run elastic-search cluster
+```
+docker-compose up -d
+```
+4- Run Kibana
+```
+docker-compose -f kibana.yml up -d
+```
 

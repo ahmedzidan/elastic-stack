@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  heartbeat:
+    container_name: heartbeat
+    build:
+      context: ./heart-beat
+    networks:
+      - elastic-search_elastic
+    volumes:
+      - ./certs:$CERTS_DIR
+
+networks:
+  elastic-search_elastic:
+    external: true
