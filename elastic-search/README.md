@@ -38,7 +38,7 @@ docker-compose -f create-certs.yml run --rm create_certs
 
 2- Copy .env.example to .env file
 ```
-cp .env.example .env
+cp .example.env .env
 ```
 
 3- Run elastic-search cluster

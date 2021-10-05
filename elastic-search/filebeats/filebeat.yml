@@ -1,0 +1,13 @@
+filebeat.inputs:
+  - type: docker
+    combine_partial: true
+    containers:
+      path: "/var/lib/docker/containers"
+      stream: "stdout"
+      ids:
+        - "*"
+output.elasticsearch:
+  hosts: ["https://es01:9200"]
+  username: "elastic"
+  password: "test"      
+  ssl.certificate_authorities: $CERTS_DIR/ca/ca.crt
