@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.0.0-alpha2
+    # https://github.com/docker/swarmkit/issues/1951
+    hostname: "filebeat"
+    # Need to override user so we can access the log files, and docker.sock
+    user: root
+    volumes:
+      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - filebeat:/usr/share/filebeat/data
+      - /var/run/docker.sock:/var/run/docker.sock
+      # This is needed for filebeat to load container log path as specified in filebeat.yml
+      - /var/lib/docker/containers/:/var/lib/docker/containers/:ro
+      - ./certs:/usr/share/elasticsearch/config/certificates
+    environment:
+      - ELASTICSEARCH_HOST=${ELASTICSEARCH_HOST:-https://es01}
+      - KIBANA_HOST=${KIBANA_HOST:-http://kibana}
+      - ELASTICSEARCH_USERNAME=${ELASTICSEARCH_USERNAME:-elastic}
+      - ELASTICSEARCH_PASSWORD=${ELASTICSEARCH_PASSWORD:-test}
+      - CERT_CA=${CERT_CA:-/usr/share/elasticsearch/config/certificates/ca/ca.crt}
+    # disable strict permission checks
+    command: filebeat -e -strict.perms=false
+    networks:
+      - elastic-search_elastic
+
+volumes:
+  filebeat:
+
+networks:
+  elastic-search_elastic:
+    external: true 
+   
