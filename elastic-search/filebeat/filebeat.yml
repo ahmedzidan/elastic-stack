@@ -1,35 +1,17 @@
-#filebeat.inputs:
-#- type: container
-#  enabled: true
-#  paths:
-#    -/var/lib/docker/containers/*/*.log
-#  stream: all # can be all, stdout or stderr
-
 #========================== Filebeat autodiscover ==============================
-# See this URL on how to run Apache2 Filebeat module: # https://www.elastic.co/guide/en/beats/filebeat/current/running-on-docker.html
-filebeat.autodiscover:
-  providers:
-    - type: docker
-      # https://www.elastic.co/guide/en/beats/filebeat/current/configuration-autodiscover-hints.html
-      # This URL alos contains instructions on multi-line logs
-      hints.enabled: true
-
-#================================ Processors ===================================
-processors:
-- add_cloud_metadata: ~
-- add_docker_metadata: ~
-- add_locale:
-    format: offset
-- add_host_metadata:
-    netinfo.enabled: true
-
-#========================== Elasticsearch output ===============================
-output.elasticsearch:
-  hosts: ["${ELASTICSEARCH_HOST}:9200"]
-  username: ${ELASTICSEARCH_USERNAME}
-  password: ${ELASTICSEARCH_PASSWORD}
-  ssl.certificate_authorities: ${CERT_CA}
-
+# filebeat.autodiscover:
+#   providers:
+#     - type: docker
+#       hints.enabled: true
+filebeat.inputs:
+- type: docker
+  containers.ids: 
+    - '74ba4b6ef7bfb128cb16d9044cf3aca6f54799f588a3dee6635e63e4629ac6f3'
+#========================== logstash output ===============================
+output.logstash:
+  enabled: true
+  hosts: ["logstash:5044"]
+  worker: 1
 #============================== Dashboards =====================================
 setup.dashboards:
   enabled: false
@@ -40,6 +22,9 @@ setup.kibana:
   username: ${ELASTICSEARCH_USERNAME}
   password: ${ELASTICSEARCH_PASSWORD}
 #============================== template setting =========================================
+setup.template.overwrite: true
 setup.template.settings:
-  index.number_of_shards: 1
-  index.number_of_replicas: 0
+  index:
+    number_of_shards: 1
+    codec: best_compression
+    number_of_replicas: 0

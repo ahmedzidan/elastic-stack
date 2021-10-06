@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.15.0
+    container_name: logstash
+    volumes:
+      - ./logstash/pipeline/:/usr/share/logstash/pipeline/
+      - ./certs:/usr/share/elasticsearch/config/certificates
+    environment:
+      - ELASTICSEARCH_HOST=${ELASTICSEARCH_HOST:-https://es01}
+      - KIBANA_HOST=${KIBANA_HOST:-http://kibana}
+      - ELASTICSEARCH_USERNAME=${ELASTICSEARCH_USERNAME:-elastic}
+      - ELASTICSEARCH_PASSWORD=${ELASTICSEARCH_PASSWORD:-test}
+      - CERT_CA=${CERT_CA:-/usr/share/elasticsearch/config/certificates/ca/ca.crt}
+      - Log_level=error
+    # disable strict permission checks
+    #command: filebeat -e -strict.perms=false
+    networks:
+      - elastic-search_elastic
+
+networks:
+  elastic-search_elastic:
+    external: true 
+   
