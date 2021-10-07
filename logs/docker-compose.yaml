@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.0.0-alpha2
+    container_name: filebeat
+    hostname: "filebeat"
+    user: root
+    volumes:
+      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - filebeat:/usr/share/filebeat/data
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/containers/:/var/lib/docker/containers/:ro
+    # disable strict permission checks
+    command: filebeat -e -strict.perms=false
+    networks:
+      - elastic
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.15.0
+    container_name: logstash
+    volumes:
+      - ./logstash/pipeline/:/usr/share/logstash/pipeline/
+    environment:
+      - ELASTICSEARCH_HOST=${ELASTICSEARCH_HOST:-https://es01}
+      - KIBANA_HOST=${KIBANA_HOST:-http://kibana}
+      - ELASTICSEARCH_USERNAME=${ELASTICSEARCH_USERNAME:-elastic}
+      - ELASTICSEARCH_PASSWORD=${ELASTICSEARCH_PASSWORD:-test}
+      - Log_level=error
+    networks:
+      - elastic  
+
+volumes:
+  filebeat:
+
+networks:
+  elastic:
+    driver: bridge
+   

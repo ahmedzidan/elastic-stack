@@ -1,12 +1,12 @@
 #========================== Filebeat autodiscover ==============================
-# filebeat.autodiscover:
-#   providers:
-#     - type: docker
-#       hints.enabled: true
-filebeat.inputs:
-- type: docker
-  containers.ids: 
-    - 'fe80b4fc1c7c5f976afd733de07486d5fc3014e218b7e65937c9daed22aa049a'
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+# filebeat.inputs:
+# - type: docker
+#   containers.ids: 
+#     - 'fe80b4fc1c7c5f976afd733de07486d5fc3014e218b7e65937c9daed22aa049a'
 #========================== logstash output ===============================
 output.logstash:
   enabled: true
