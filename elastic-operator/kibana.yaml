@@ -1,0 +1,41 @@
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: kibana
+spec:
+  version: 8.4.3
+  count: 1
+  elasticsearchRef:
+    name: elasticsearch
+    namespace: elasticsearch
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true  
+  podTemplate:
+    spec:
+      containers:
+      - name: kibana
+        env:
+          - name: NODE_OPTIONS
+            value: "--max-old-space-size=2048"
+        resources:
+          requests:
+            memory: 1Gi
+            cpu: 0.5
+          limits:
+            memory: 1Gi
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: "dedicated"
+                    operator: In
+                    values:
+                      - "elasticsearch"
+      tolerations:
+        - key: "dedicated"
+          operator: "Equal"
+          value: "elasticsearch"
+          effect: "NoSchedule"
