@@ -6,7 +6,7 @@ function install_operator() {
   helm upgrade \
     --install \
     elastic-operator elastic/eck-operator \
-    --namespace elastic-operator \
+    --namespace elastic-system \
     --create-namespace \
     --version v2.4.0 \
     -f operator.yaml

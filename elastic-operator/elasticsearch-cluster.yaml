@@ -5,6 +5,10 @@ metadata:
   namespace: elasticsearch
 spec:
   version: 8.4.3
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
   nodeSets:
   - name: master
     count: 3
